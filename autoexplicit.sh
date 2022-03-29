@@ -63,7 +63,7 @@ while read line; do
   #echo "before = $before"
   after=`sed '1,/^\/\/ Explicit template instantiation$/d' $cpp`;
   #echo "after = $after"
-  explicit=`echo "template $symbol;" | sed -e "s/std::__1::/std::/g" | sed -e "s/__sFILE/FILE/g"`
+  explicit=`echo "template $symbol;" | sed -e "s/std::__1::/std::/g" | sed -e "s/__sFILE/FILE/g" | sed -e "s/CGAL::Lazy_exact_nt<__gmp_expr<__mpq_struct \\[1\\], __mpq_struct \\[1\\]> >/CGAL::Epeck::FT/g"`
   #echo "$explicit"
   if grep -F "$explicit" "$cpp"
   then
