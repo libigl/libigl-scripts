@@ -63,7 +63,14 @@ while read line; do
   #echo "before = $before"
   after=`sed '1,/^\/\/ Explicit template instantiation$/d' $cpp`;
   #echo "after = $after"
-  explicit=`echo "template $symbol;" | sed -e "s/std::__1::/std::/g" | sed -e "s/__sFILE/FILE/g" | sed -e "s/CGAL::Lazy_exact_nt<__gmp_expr<__mpq_struct \\[1\\], __mpq_struct \\[1\\]> >/CGAL::Epeck::FT/g"`
+  explicit=`echo "template $symbol;" | \
+    sed -e "s/std::__1::/std::/g" | \
+    sed -e "s/__sFILE/FILE/g" | \
+    sed -e "s/std::mersenne_twister_engine<[^>]*long,[^>]*>/std::mt19937_64/g" | \
+    sed -e "s/std::mersenne_twister_engine<[^>]*int,[^>]*>/std::mt19937/g" | \
+    sed -e "s/std::linear_congruential_engine<[^>]*16807[^>]*>/std::minstd_rand0/g" | \
+    sed -e "s/std::linear_congruential_engine<[^>]*48271[^>]*>/std::minstd_rand/g" | \
+    sed -e "s/CGAL::Lazy_exact_nt<__gmp_expr<__mpq_struct \\[1\\], __mpq_struct \\[1\\]> >/CGAL::Epeck::FT/g"`
   #echo "$explicit"
   if grep -F "$explicit" "$cpp"
   then
